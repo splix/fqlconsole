@@ -1,0 +1,7 @@
+fqlconsole.config
+target
+*.ipr
+*.iml
+*.iws
+.settings
+.project

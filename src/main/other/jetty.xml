@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE Configure PUBLIC "-//Mort Bay Consulting//DTD Configure//EN" "http://jetty.mortbay.org/configure.dtd">
+
+<Configure id="Server" class="org.mortbay.jetty.Server">
+
+    <!-- =========================================================== -->
+    <!-- Server Thread Pool                                          -->
+    <!-- =========================================================== -->
+    <Set name="ThreadPool">
+        <New class="org.mortbay.thread.BoundedThreadPool">
+            <Set name="minThreads">3</Set>
+            <Set name="maxThreads">10</Set>
+        </New>
+    </Set>
+
+    <!-- =========================================================== -->
+    <!-- Set connectors                                              -->
+    <!-- =========================================================== -->
+    <!-- One of each type!                                           -->
+    <!-- =========================================================== -->
+    <Set name="connectors">
+        <Array type="org.mortbay.jetty.Connector">
+
+            <Item>
+                <New class="org.mortbay.jetty.nio.SelectChannelConnector">
+                    <Set name="port">8081</Set>
+                    <Set name="maxIdleTime">30000</Set>
+                    <Set name="Acceptors">3</Set>
+                </New>
+            </Item>
+        </Array>
+    </Set>
+
+    <!-- =========================================================== -->
+    <!-- Set handlers                                                -->
+    <!-- =========================================================== -->
+    <Set name="handlers">
+        <Array type="org.mortbay.jetty.Handler">
+
+            <!-- ======================================================= -->
+            <!-- Configure a test web application with web.xml           -->
+            <!-- ======================================================= -->
+            <Item>
+                <New id="fqlconsoleWebAppContext" class="org.mortbay.jetty.webapp.WebAppContext">
+                    <Set name="contextPath">/fqlconsole</Set>
+                    <Set name="war">./webapp</Set>
+                </New>
+            </Item>
+            <Item>
+                <New id="DefaultHandler" class="org.mortbay.jetty.handler.DefaultHandler"/>
+            </Item>
+
+
+        </Array>
+    </Set>
+
+    <Ref id="RequestLog">
+        <Set name="requestLog">
+            <New id="RequestLogImpl" class="org.mortbay.jetty.NCSARequestLog">
+                <Set name="filename"><SystemProperty name="jetty.logs" default="./"/>/request.log
+                </Set>
+                <Set name="append">false</Set>
+            </New>
+        </Set>
+    </Ref>
+
+    <!-- =========================================================== -->
+    <!-- extra options                                               -->
+    <!-- =========================================================== -->
+    <Set name="stopAtShutdown">true</Set>
+
+</Configure>
